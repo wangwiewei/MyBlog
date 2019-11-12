@@ -57,3 +57,26 @@ python manage.py inspectdb > app/models.py
 def hanshu(request,year,month):
     return HttpResponse("这里打印年{0}月{1}".fromat(year,month))
 ```
+
+#### 查找方法
+
+- gt:大于
+
+- gte:大于等于
+
+- lt: 小于
+
+- lte:小于等于
+
+- range:范围
+
+- year:年份
+
+- isnull:是否为空
+
+  ##### 模糊查询
+
+- 
+
+- contains:包含
+
