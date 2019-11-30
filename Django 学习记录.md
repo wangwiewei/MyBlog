@@ -2,14 +2,34 @@
 
 ### 环境部署
 
-vulnerable
+Linux 安装Django
+
+##### Linux 环境准备
+
+[anaconda官方安装指导][https://docs.anaconda.com/anaconda/install/linux/"官方安装指导"]
 
 ### 环境准备
 
 #### Anaconda 创建虚拟环境
 
 ```python
+# 查看conda的环境
+conda list
+# 显示安装的虚拟环境列表
+conda  env list
+# 创建conda虚拟环境
 conda create -n djconda python=3.7.3
+# 激活虚拟环境
+source activate mydjango
+conda activate mydjango
+# 激活后安装django
+pip install django==2.2
+```
+
+#### 创建Django工程
+
+``` python
+django-admin startproject tjsoc
 ```
 
 #### 启动Django
@@ -17,6 +37,14 @@ conda create -n djconda python=3.7.3
 ```python
 python3 manage.py runserver 0.0.0.0:8000
 ```
+
+#### 取消Django访问控制
+
+```python
+ALLOWED_HOSTS = ['*']
+```
+
+
 
 #### 调试Django
 
@@ -79,4 +107,34 @@ def hanshu(request,year,month):
 - 
 
 - contains:包含
+
+#### admin
+
+1. 安装Django-suit
+
+2. 创建suitconfig
+
+   ```python
+   # my_project_app/apps.py
+   from suit.apps import DjangoSuitConfig
+   
+   class SuitConfig(DjangoSuitConfig):
+       layout = 'horizontal'
+   ```
+
+   ```python
+   INSTALLED_APPS = (
+       ...
+       'my_project_app.apps.SuitConfig',
+       'django.contrib.admin',
+   )
+   ```
+
+   
+
+3. 长度
+
+```python
+pip install https://github.com/darklow/django-suit/tarball/v2
+```
 
