@@ -44,7 +44,9 @@ python3 manage.py runserver 0.0.0.0:8000
 ALLOWED_HOSTS = ['*']
 ```
 
+### Django添加MySQL数据库
 
+ 
 
 #### 调试Django
 
@@ -108,9 +110,26 @@ def hanshu(request,year,month):
 
 - contains:包含
 
-#### admin
+### admin
 
-1. 安装Django-suit
+#### 1.mysql install
+
+``` shell
+yum install mysql-community-server
+# 如果提示目录存在数据，则情况数据目录（默认为/var/lib/mysql）
+mysqld --initialize --user=mysql --cosole
+# 查看默认密码
+grep 'temporary password' /var/log/mysqld.log
+cat ~/.mysql_secert
+```
+
+
+
+#### 2. 启用APP
+
+
+
+#### 3. 安装Django-suit
 
 2. 创建suitconfig
 
@@ -129,8 +148,6 @@ def hanshu(request,year,month):
        'django.contrib.admin',
    )
    ```
-
-   
 
 3. 长度
 
