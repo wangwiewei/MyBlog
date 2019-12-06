@@ -142,7 +142,7 @@ mysqld --initialize --user=mysql --cosole
 grep 'temporary password' /var/log/mysqld.log
 cat ~/.mysql_secert
 # 修改数据库默认密码
-alter user 'root'@'localhost' identified by 'Vi@qf4J6SD';、
+alter user 'root'@'localhost' identified by 'Vi@qf4J6SD';
 # 添加一个远程可以登录数据库的用户
 create user "tjsocdb"@"%" identified by "tj@soc2019";
 # 为用户授权数据库访问和操作
