@@ -4,17 +4,17 @@
 
 1. 数据表
    1. IP资产表-记录公司IP和主机资产
-      1. id（记录数量）
-      2. ip：通信地址
-      3. status：记录ip是否启用
+      1. id（自动添加无需记录）
+      2. ip = models.IPAddressField(protocol='IPv4', verbose_name="IP地址") # 通信地址
+      3. status = models.CharField(max_length=20， verbose_name="主机状态") #：IP启用是active，未启用是inactive
       4. ip_type：区分ip类别：VIP，跳板机，蜜罐，防火墙，办公，服务器，安全服务器
-      5. hostname：主机名和域名：vip给一个统一的名称
+      5. hostname = models.CharField(max_length=128, null = True) #：主机名和域名：vip给一个统一的名称
       6. os：系统类型：win，linux，虚拟，其他
       7. net_area：安全区域划分（外部和内部，内部-dmz-生产-测试-开发-office结合安全开发确认）
-      9. APP：应用：默认开放为全端口，或者使用防护墙指定端口
-      10. owner：记录最终的使用人
-      11. sec_level:IP安全等级（10：为黑名单，1：为白名单）
-      12. 备注
+      8. APP：应用：默认开放为全端口，或者使用防护墙指定端口
+      9. owner：记录最终的使用人
+      10. sec_level:IP安全等级（10：为黑名单，1：为白名单）
+      11. 备注
    2. 应用表-记录使用的应用
       1. id
       2. ip
