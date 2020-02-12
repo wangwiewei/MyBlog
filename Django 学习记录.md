@@ -73,23 +73,21 @@ DATABASES = {
 }
  ```
 
-#### 使用模型迁移数据
-
-```python
-python manage.py makemigrations TestModel
-python manage.py migrate TestModel
-```
-
 #### 使用现有数据库自动生成模型文件
 
 ```python
-# 使用SQL自动生成models模型文件
-python manage.py inspectdb
 # 创建一个app
 django-admin.py startapp tjsoc
+# 使用SQL自动生成models模型文件
+python manage.py inspectdb
+# 迁移模型
+python manage.py makemigrations tjsoc
+python manage.py migrate tjsoc
 # 使用现有数据库自动生成模型文件
 python manage.py inspectdb
 python manage.py inspectdb > tjsoc/models.py
+# 添加Django admin 超级管理员账号
+python manage.py createsuperuser
 ```
 
 #### URL文件
@@ -135,7 +133,18 @@ def hanshu(request,year,month):
 #### 1.mysql install
 
 ``` shell
+# mysql5.6添加更新源
+wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+mysql_install_db --user=mysql  --datadir=/data/mysql &
+service mysql start
+mysqladmin -u root password '密码'
+
+
 yum install mysql-community-server
+
+/mysql_install_db --user=mysql  --datadir=/data/mysql &
+mysqladmin -u root password 'new-password
+
 # 如果提示目录存在数据，则情况数据目录（默认为/var/lib/mysql）
 mysqld --initialize --user=mysql --cosole
 # 查看默认密码
@@ -143,6 +152,8 @@ grep 'temporary password' /var/log/mysqld.log
 cat ~/.mysql_secert
 # 修改数据库默认密码
 alter user 'root'@'localhost' identified by 'Vi@qf4J6SD';
+# 新建数据指定utf8编码
+CREATE DATABASE `tjsoc_test` CHARACTER SET utf8 COLLATE utf8_general_ci;
 # 添加一个远程可以登录数据库的用户
 create user "tjsocdb"@"%" identified by "tj@soc2019";
 # 为用户授权数据库访问和操作
@@ -174,7 +185,7 @@ show grants;
    ```python
    # 添加Django admin 超级管理员账号
    python manage.py createsuperuser
-   # user:tjadmin  pass: managertj
+   # user:tjadmin  pass: managertjsoc
    ```
 
 3. 长度
@@ -183,3 +194,6 @@ show grants;
 pip install https://github.com/darklow/django-suit/tarball/v2
 ```
 
+
+
+[https://docs.anaconda.com/anaconda/install/linux/"官方安装指导（64位系统）"]: 
