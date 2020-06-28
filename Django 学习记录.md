@@ -143,25 +143,31 @@ mysqladmin -u root password '密码'
 yum install mysql-community-server
 
 /mysql_install_db --user=mysql  --datadir=/data/mysql &
-mysqladmin -u root password 'new-password
+mysqladmin -u root password 'new-password'
 
-# 如果提示目录存在数据，则情况数据目录（默认为/var/lib/mysql）
+# 初始化，则情况数据目录（默认为/var/lib/mysql）
 mysqld --initialize --user=mysql --cosole
 # 查看默认密码
 grep 'temporary password' /var/log/mysqld.log
 cat ~/.mysql_secert
+# 查看授权用户
+select host, user from mysql.user;
+SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
 # 修改数据库默认密码
-alter user 'root'@'localhost' identified by 'Vi@qf4J6SD';
+alter user 'root'@'localhost' identified by 'tjsoc@2020';
 # 新建数据指定utf8编码
-CREATE DATABASE `tjsoc_test` CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE `tjsoc` CHARACTER SET utf8 COLLATE utf8_general_ci;
 # 添加一个远程可以登录数据库的用户
-create user "tjsocdb"@"%" identified by "tj@soc2019";
+create user "tjsocdb"@"%" identified by "tj@soc2020";
 # 为用户授权数据库访问和操作
 grant all privileges on `tjsoc`.* to 'tjsocdb'@'%';
+#skip_grate_table 登录后修改root密码
+update user set Password =password('wei=61722') where User='root';
 # 刷新权限表
 flush privileges;
 # 查看用户权限
 show grants;
+show grants for tjsocdb;
 ```
 
 #### 3. 安装Django-suit
