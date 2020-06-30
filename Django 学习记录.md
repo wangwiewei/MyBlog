@@ -27,6 +27,7 @@ conda list
 conda  env list
 # 创建conda虚拟环境
 conda create -n mydjango python=3.7.3
+pip install https://github.com/darklow/django-suit/tarball/v2
 # 虚拟环境安装mysql库
 conda install -n mydjango mysqlclient
 # 查看虚拟环境安装了那些库
@@ -89,6 +90,16 @@ python manage.py inspectdb > tjsoc/models.py
 # 添加Django admin 超级管理员账号
 python manage.py createsuperuser
 ```
+
+#### run django
+
+``` python
+python manage.py runserver 0.0.0.0:8000
+```
+
+
+
+
 
 #### URL文件
 
@@ -154,7 +165,7 @@ cat ~/.mysql_secert
 select host, user from mysql.user;
 SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
 # 修改数据库默认密码
-alter user 'root'@'localhost' identified by 'tjsoc@2020';
+alter user 'root'@'localhost' identified by 'tjsoc@2020';#root--wei=61722
 # 新建数据指定utf8编码
 CREATE DATABASE `tjsoc` CHARACTER SET utf8 COLLATE utf8_general_ci;
 # 添加一个远程可以登录数据库的用户
@@ -163,6 +174,10 @@ create user "tjsocdb"@"%" identified by "tj@soc2020";
 grant all privileges on `tjsoc`.* to 'tjsocdb'@'%';
 #skip_grate_table 登录后修改root密码
 update user set Password =password('wei=61722') where User='root';
+# 修复无密码登录
+update user set authentication_string=password("你的密码") where user='root';  #(无password字段的版本,也就是版本<=5.7的)
+update user set password=password('tj@soc2020') where user='tjsoc'; #(有password字段的版本,版本>5.7的)
+update user set plugin="mysql_native_password"; 
 # 刷新权限表
 flush privileges;
 # 查看用户权限
