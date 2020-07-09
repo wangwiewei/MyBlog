@@ -4,19 +4,26 @@
 
 Linux 安装Django
 
-##### Linux 环境准备
+环境准备
+
+#### Linux 环境准备
 
 [anaconda官方安装指导][https://docs.anaconda.com/anaconda/install/linux/"官方安装指导（64位系统）"]
+
+*资料*
+
+``` python
+https://docs.djangoproject.com/zh-hans/2.2/ref/models/fields/#registering-and-fetching-lookups
+    
+```
 
 
 
 ``` shell
 conda install -n mydjango mysql
+pip install pymysql
+pip install https://github.com/darklow/django-suit/tarball/v2
 ```
-
-
-
-### 环境准备
 
 #### Anaconda 创建虚拟环境
 
@@ -74,32 +81,34 @@ DATABASES = {
 }
  ```
 
-#### 使用现有数据库自动生成模型文件
+#### 启动 django
+
+```python
+python manage.py runserver 0.0.0.0:8000
+```
+
+#### 创建apps
 
 ```python
 # 创建一个app
 django-admin.py startapp tjsoc
-# 使用SQL自动生成models模型文件
-python manage.py inspectdb
+
+# 添加Django admin 超级管理员账号
+python manage.py createsuperuser# 添加Django admin 超级管理员账号
+python manage.py createsuperuser
+
+
 # 迁移模型
 python manage.py makemigrations tjsoc
 python manage.py migrate tjsoc
+
 # 使用现有数据库自动生成模型文件
 python manage.py inspectdb
 python manage.py inspectdb > tjsoc/models.py
-# 添加Django admin 超级管理员账号
-python manage.py createsuperuser
+
+# 使用SQL自动生成models模型文件
+python manage.py inspectdb
 ```
-
-#### run django
-
-``` python
-python manage.py runserver 0.0.0.0:8000
-```
-
-
-
-
 
 #### URL文件
 
@@ -165,19 +174,23 @@ cat ~/.mysql_secert
 select host, user from mysql.user;
 SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
 # 修改数据库默认密码
-alter user 'root'@'localhost' identified by 'tjsoc@2020';#root--wei=61722
+alter user 'root'@'localhost' identified by 'wei=61722';
 # 新建数据指定utf8编码
 CREATE DATABASE `tjsoc` CHARACTER SET utf8 COLLATE utf8_general_ci;
-# 添加一个远程可以登录数据库的用户
-create user "tjsocdb"@"%" identified by "tj@soc2020";
+# 添加一个远程可以登录数据库的用户,%表示任何地方
+create user "tjsoc"@"%" identified by "tjsoc@2020";
 # 为用户授权数据库访问和操作
-grant all privileges on `tjsoc`.* to 'tjsocdb'@'%';
+grant all privileges on `tjsoc`.* to 'tjsoc'@'%' identified by 'tjsoc@2020';
+grant all privileges on `tjsoc`.* to 'tjsoc'@'%';
 #skip_grate_table 登录后修改root密码
+
+# mysql 修改密码
 update user set Password =password('wei=61722') where User='root';
-# 修复无密码登录
-update user set authentication_string=password("你的密码") where user='root';  #(无password字段的版本,也就是版本<=5.7的)
-update user set password=password('tj@soc2020') where user='tjsoc'; #(有password字段的版本,版本>5.7的)
+update user set password=password('tjsoc@2020') where user='tjsoc'; 
 update user set plugin="mysql_native_password"; 
+# mysql => 5.7
+update user set authentication_string=password("你的密码") where user='root'; 
+
 # 刷新权限表
 flush privileges;
 # 查看用户权限
