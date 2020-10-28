@@ -1,12 +1,10 @@
-### install Docker
+### install  Docker
 
 ``` shell
 wget -qO- https://get.docker.com | sh
 ```
 
 [ 官方文档 ](https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface)
-
-
 
 
 
