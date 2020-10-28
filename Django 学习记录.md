@@ -97,7 +97,6 @@ django-admin.py startapp tjsoc
 python manage.py createsuperuser# 添加Django admin 超级管理员账号
 python manage.py createsuperuser
 
-
 # 迁移模型
 python manage.py makemigrations tjsoc
 python manage.py migrate tjsoc
