@@ -8,13 +8,14 @@ Linux 安装Django
 
 #### Linux 环境准备
 
-[anaconda官方安装指导][https://docs.anaconda.com/anaconda/install/linux/"官方安装指导（64位系统）"]
+[anaconda官方安装指导-64位系统]:https://docs.anaconda.com/anaconda/install/linux/	"官方指导"
+
+[ djnago 2.2 ]: https://docs.djangoproject.com/zh-hans/2.2/ref/models/fields/#registering-and-fetching-lookups 官方指导
 
 *资料*
 
 ``` python
 https://docs.djangoproject.com/zh-hans/2.2/ref/models/fields/#registering-and-fetching-lookups
-    
 ```
 
 
@@ -125,6 +126,15 @@ def hanshu(request,year,month):
     return HttpResponse("这里打印年{0}月{1}".fromat(year,month))
 ```
 
+#### 更新model
+
+```python
+python manage.py makemigrations
+python manage.py migrate
+```
+
+*如果此次更新有新增字段并且不允许字段为空会报错。选择1指定默认值，然后再输入timezone.now 继续*
+
 #### 查找方法
 
 - gt:大于
@@ -199,9 +209,15 @@ show grants for tjsocdb;
 
 #### 3. 安装Django-suit
 
+1. 安装Django-suit
+
+   ``` python
+   pip install https://github.com/darklow/django-suit/tarball/v2
+   ```
+
 2. 创建suitconfig
 
-   ```python
+   ``` python
    # 修改assetmgr/apps.py添加如下内容
    from suit.apps import DjangoSuitConfig
    
@@ -215,18 +231,19 @@ show grants for tjsocdb;
    )
    ```
 
-   ```python
+3. 创建diango 超级管理员
+
+   ``` python
    # 添加Django admin 超级管理员账号
    python manage.py createsuperuser
-   # user:tjadmin  pass: managertjsoc
+   # user:tjadmin  pass: managertjsoc长度
    ```
 
-3. 长度
+4. 测试
 
-```python
-pip install https://github.com/darklow/django-suit/tarball/v2
-```
+
 
 
 
 [https://docs.anaconda.com/anaconda/install/linux/"官方安装指导（64位系统）"]: 
+[https://docs.anaconda.com/anaconda/install/linux/]: 
