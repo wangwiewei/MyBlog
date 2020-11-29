@@ -36,6 +36,7 @@ wget -qO- https://get.docker.com | sh
    docker-ce.x86_64  3:19.03.13-3.el7
    # 安装Docker 依赖包
    dnf install device-mapper-persistent-data lvm2
+   dnf install https://download.docker.com/linux/fedora/30/x86_64/stable/Packages/containerd.io-1.2.6-3.3.fc30.x86_64.rpm
    # 安装Docker
    dnf install -y docker-ce --nobest
    # 设置 Docker开机启动
@@ -77,8 +78,6 @@ wget -qO- https://get.docker.com | sh
    docker pull centos
    ```
 
-   
-
 6. 构建Docker 镜像
 
    ```shell
@@ -87,8 +86,6 @@ wget -qO- https://get.docker.com | sh
    # 
    dcoker build 构建dockerfile 文件
    ```
-
-   
 
 7. 删除镜像
 
