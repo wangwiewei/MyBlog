@@ -93,9 +93,72 @@ wget -qO- https://get.docker.com | sh
    docker rmi $IMAGE_ID
    ```
 
-   
+8. 创建运行容器
 
-8. 的
+   ``` shell
+   # 创建容器
+   docker run 
+   -i 		交互模式运行容器
+   -t		容器启动后进入命令行
+   --name 	容器命名
+   -v		创建目录映射，前者是宿主机目录，后者是映射到宿主机的目录。可以使用多个-v
+   -d		守护模式运行
+   -p		端口映射，前者是宿主机端口，后者是容器内的端口
+   ```
+
+9. 登录容器的方式
+
+   ``` shell
+   # 直接启动进入容器
+   docker -i -t --name=myname image /bin/bahs
+   # 守护式启动容器
+   docker -d -i -t --name=myname image /bin/bash
+   # 附着守护式容器 - 此方式退出容器时，容器会停止
+   docker attach myname
+   # 此方式登录容器退出后容器不会停止
+   docker exec -i -t myname /bin/bash
+   ```
+
+10. 查看正在运行的docker
+
+    ``` shell
+    docker ps
+    -a		历史上启动过的dockers 容器
+    -l		查看最后一次运行的容器
+    ```
+
+    
+
+11. 停止运行的容器
+
+    ``` shell
+    docker stop container_name[ID]
+    ```
+
+12. 启动停止的容器
+
+    ``` shell
+    docker start container_name[ID]
+    ```
+
+13. 深入容器内部
+
+    ``` shell
+    docker inspect container_name[ID]
+    -f --fromat 查看选定内容+
+    ```
+
+14. Docker 文件拷贝
+
+    ``` shell
+    docker cp file container_name:/路径
+    ```
+
+    
+
+15. Docker 镜像导出
+
+16. Docker 镜像导入
 
 ### 常用命令 [Docker-学习.md](Docker-学习.md) 
 
@@ -112,5 +175,7 @@ docker version
 docker info
 # 启动Docker服务
 service docker start
+# 查看运行的docker
+
 ```
 
