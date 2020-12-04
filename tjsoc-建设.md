@@ -59,10 +59,6 @@ tjsoc的目标
 
 ## 主机和漏洞发现
 
-
-
-
-
 SQL注入	
 Windows漏洞	高危漏洞
 XSS	
