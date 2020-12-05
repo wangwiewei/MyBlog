@@ -1,22 +1,24 @@
 # Django 学习记录
 
-### 环境部署
+### 所需软件包
 
-Linux 安装Django
+``` shell
+yum install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver gzip2
+```
 
-环境准备
+``` shell
+pip install pymysql https://github.com/darklow/django-suit/tarball/v2
+```
 
-#### Linux 环境准备
 
-[anaconda官方安装指导-64位系统]:https://docs.anaconda.com/anaconda/install/linux/	"官方指导"
 
-[ djnago 2.2 ]: https://docs.djangoproject.com/zh-hans/2.2/ref/models/fields/#registering-and-fetching-lookups 官方指导
+#### Linux 准备Install anaconda
 
 *资料*
 
-``` python
-https://docs.djangoproject.com/zh-hans/2.2/ref/models/fields/#registering-and-fetching-lookups
-```
+[anaconda官网安装指导-AMD64](https://docs.anaconda.com/anaconda/install/linux/ )
+
+[djnggo 2.2](https://docs.djangoproject.com/zh-hans/2.2/ref/models/fields/#registering-and-fetching-lookups)
 
 
 
@@ -159,7 +161,7 @@ python manage.py migrate
 
 ### admin
 
-#### 1.mysql install
+#### 1. Install MySql
 
 ``` shell
 # mysql5.6添加更新源
@@ -168,9 +170,7 @@ mysql_install_db --user=mysql  --datadir=/data/mysql &
 service mysql start
 mysqladmin -u root password '密码'
 
-
 yum install mysql-community-server
-
 /mysql_install_db --user=mysql  --datadir=/data/mysql &
 mysqladmin -u root password 'new-password'
 
