@@ -35,8 +35,7 @@ wget -qO- https://get.docker.com | sh
    Docker CE Stable - x86_64                                                             
    docker-ce.x86_64  3:19.03.13-3.el7
    # 安装Docker 依赖包
-   dnf install device-mapper-persistent-data lvm2
-   dnf install https://download.docker.com/linux/fedora/30/x86_64/stable/Packages/containerd.io-1.2.6-3.3.fc30.x86_64.rpm
+   dnf install device-mapper-persistent-data lvm2 https://download.docker.com/linux/fedora/30/x86_64/stable/Packages/containerd.io-1.2.6-3.3.fc30.x86_64.rpm
    # 安装Docker
    dnf install -y docker-ce --nobest
    # 设置 Docker开机启动
@@ -48,7 +47,7 @@ wget -qO- https://get.docker.com | sh
    # 添加以下内容保持退出 - 需要重启Docker
    
    ```
-
+   
 4. 设置Docker 镜像源
 
    ``` shell
