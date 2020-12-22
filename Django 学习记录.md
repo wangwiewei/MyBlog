@@ -112,6 +112,15 @@ python manage.py inspectdb > tjsoc/models.py
 python manage.py inspectdb
 ```
 
+#### 更新models
+
+``` shell
+python manage.py makemigrations
+python manage.py migrate
+```
+
+
+
 #### URL文件
 
 ```python
