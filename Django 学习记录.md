@@ -3,7 +3,7 @@
 ### 所需软件包
 
 ``` shell
-yum install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver gzip2
+yum install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver bzip2
 ```
 
 ``` shell
