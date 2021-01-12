@@ -33,18 +33,14 @@
 
 1. 使用命令
 
-    
-
+   ```shell
+vi /etc/login.defs
    ```
-   vi /etc/login.defs
-   ```
-
-    
-
+   
    修改配置文件。
 
    - `PASS_MAX_DAYS 90 #新建用户的密码最长使用天数`
-   - `PASS_MIN_DAYS 0 #新建用户的密码最短使用天数`
+- `PASS_MIN_DAYS 0 #新建用户的密码最短使用天数`
    - `PASS_WARN_AGE 7 #新建用户的密码到期提前提醒天数`
 
 2. 使用chage命令修改用户设置。
