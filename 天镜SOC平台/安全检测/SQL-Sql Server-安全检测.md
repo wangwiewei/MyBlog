@@ -1,0 +1,51 @@
+# SQL Server 安全检测
+
+**SQL Server 2000安全设置之-数据库危险存储过程的删除与恢复**
+
+use master
+exec sp_dropextendedproc 'xp_cmdshell'
+exec sp_dropextendedproc 'xp_dirtree'
+exec sp_dropextendedproc 'xp_enumgroups'
+exec sp_dropextendedproc 'xp_fixeddrives'
+exec sp_dropextendedproc 'xp_loginconfig'
+exec sp_dropextendedproc 'xp_enumerrorlogs'
+exec sp_dropextendedproc 'xp_getfiledetails'
+exec sp_dropextendedproc 'Sp_OACreate'
+exec sp_dropextendedproc 'Sp_OADestroy'
+exec sp_dropextendedproc 'Sp_OAGetErrorInfo'
+exec sp_dropextendedproc 'Sp_OAGetProperty'
+exec sp_dropextendedproc 'Sp_OAMethod'
+exec sp_dropextendedproc 'Sp_OASetProperty'
+exec sp_dropextendedproc 'Sp_OAStop'
+exec sp_dropextendedproc 'Xp_regaddmultistring'
+exec sp_dropextendedproc 'Xp_regdeletekey'
+exec sp_dropextendedproc 'Xp_regdeletevalue'
+exec sp_dropextendedproc 'Xp_regenumvalues'
+exec sp_dropextendedproc 'Xp_regread'
+exec sp_dropextendedproc 'Xp_regremovemultistring'
+exec sp_dropextendedproc 'Xp_regwrite'
+drop procedure sp_makewebtask
+go
+2、恢复代码
+use master
+exec sp_addextendedproc xp_cmdshell,'xp_cmdshell.dll'
+exec sp_addextendedproc xp_dirtree,'xpstar.dll'
+exec sp_addextendedproc xp_enumgroups,'xplog70.dll'
+exec sp_addextendedproc xp_fixeddrives,'xpstar.dll'
+exec sp_addextendedproc xp_loginconfig,'xplog70.dll'
+exec sp_addextendedproc xp_enumerrorlogs,'xpstar.dll'
+exec sp_addextendedproc xp_getfiledetails,'xpstar.dll'
+exec sp_addextendedproc sp_OACreate,'odsole70.dll'
+exec sp_addextendedproc sp_OADestroy,'odsole70.dll'
+exec sp_addextendedproc sp_OAGetErrorInfo,'odsole70.dll'
+exec sp_addextendedproc sp_OAGetProperty,'odsole70.dll'
+exec sp_addextendedproc sp_OAMethod,'odsole70.dll'
+exec sp_addextendedproc sp_OASetProperty,'odsole70.dll'
+exec sp_addextendedproc sp_OAStop,'odsole70.dll'
+exec sp_addextendedproc xp_regaddmultistring,'xpstar.dll'
+exec sp_addextendedproc xp_regdeletekey,'xpstar.dll'
+exec sp_addextendedproc xp_regdeletevalue,'xpstar.dll'
+exec sp_addextendedproc xp_regenumvalues,'xpstar.dll'
+exec sp_addextendedproc xp_regread,'xpstar.dll'
+exec sp_addextendedproc xp_regremovemultistring,'xpstar.dll'
+exec sp_addextendedproc xp_regwrite,'xpstar.dll'
