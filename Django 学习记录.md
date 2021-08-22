@@ -175,24 +175,16 @@ python manage.py migrate
 ``` shell
 # mysql5.6添加更新源
 wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-mysql_install_db --user=mysql  --datadir=/data/mysql &
-service mysql start
-mysqladmin -u root password '密码'
-
+# 安装MySQL服务
 yum install mysql-community-server
-/mysql_install_db --user=mysql  --datadir=/data/mysql &
-mysqladmin -u root password 'new-password'
-
-# 初始化，则情况数据目录（默认为/var/lib/mysql）
-mysqld --initialize --user=mysql --cosole
-# 查看默认密码
-grep 'temporary password' /var/log/mysqld.log
-cat ~/.mysql_secert
+# 初始化数据库
+mysql_install_db --user=mysql  --datadir=/data/mysql &
+# 启动MySQL
+service mysql start
+# 设置MySQL密码
+mysqladmin -u root password '密码'
 # 查看授权用户
-select host, user from mysql.user;
 SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
-# 修改数据库默认密码
-alter user 'root'@'localhost' identified by 'wei=61722';
 # 新建数据指定utf8编码
 CREATE DATABASE `tjsoc` CHARACTER SET utf8 COLLATE utf8_general_ci;
 # 添加一个远程可以登录数据库的用户,%表示任何地方
@@ -200,6 +192,18 @@ create user "tjsoc"@"%" identified by "tjsoc@2020";
 # 为用户授权数据库访问和操作
 grant all privileges on `tjsoc`.* to 'tjsoc'@'%' identified by 'tjsoc@2020';
 grant all privileges on `tjsoc`.* to 'tjsoc'@'%';
+
+
+
+# 初始化，则情况数据目录（默认为/var/lib/mysql）
+mysqld --initialize --user=mysql --cosole
+# 查看默认密码
+grep 'temporary password' /var/log/mysqld.log
+cat ~/.mysql_secert
+# 修改数据库默认密码
+alter user 'root'@'localhost' identified by 'wei=61722';
+
+
 #skip_grate_table 登录后修改root密码
 
 # mysql 修改密码
