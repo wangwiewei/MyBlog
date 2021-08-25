@@ -88,6 +88,8 @@ DATABASES = {
 
 ```python
 python manage.py runserver 0.0.0.0:8000
+# nohup 方式启动tjsoc 方便后台运行和保存日志 tjsoc.log
+nohup python manage.py runserver 0.0.0.0:8000 > tjsoc.log 2>&1 &  echo $! > tjsoc.pid
 ```
 
 #### 创建apps
