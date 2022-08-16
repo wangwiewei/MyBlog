@@ -1,3 +1,5 @@
+
+
 # Django 学习记录
 
 ### 所需软件包
@@ -176,7 +178,11 @@ python manage.py migrate
 
 ``` shell
 # mysql5.6添加更新源
+# https://dev.mysql.com/downloads/repo/yum/
 wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+wget https://dev.mysql.com/get/mysql80-community-release-el8-4.noarch.rpm
+# 安装MySQL源
+rpm -ivh mysql80-community-release-el8-4.noarch.rpm
 # 安装MySQL服务
 yum install mysql-community-server
 # 初始化数据库
@@ -204,10 +210,9 @@ grep 'temporary password' /var/log/mysqld.log
 cat ~/.mysql_secert
 # 修改数据库默认密码
 alter user 'root'@'localhost' identified by 'wei=61722';
-
-
 #skip_grate_table 登录后修改root密码
-
+#mysql 8 修改密码
+ALTER user 'root'@'localhost' IDENTIFIED by 'tjsoc@2020@Wei';
 # mysql 修改密码
 update user set Password =password('wei=61722') where User='root';
 update user set password=password('tjsoc@2020') where user='tjsoc'; 
